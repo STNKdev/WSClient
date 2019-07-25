@@ -4,12 +4,14 @@ import com.example.WSClient.wshandler.SimpleWsHandler;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.socket.client.WebSocketConnectionManager;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 
 @SpringBootApplication
 @EnableJpaRepositories
+//@EnableJpaAuditing
 public class WsClientApplication {
 
 	private final String webSocketUri = "wss://www.bitmex.com/realtime?subscribe=instrument:XBTUSD";
@@ -19,12 +21,12 @@ public class WsClientApplication {
 	}
 
 	@Bean
-	public WebSocketConnectionManager wsConnectionManager() {
+	public WebSocketConnectionManager wsConnectionManager(SimpleWsHandler simpleWsHandler) {
 
 		//Generates a web socket connection
 		WebSocketConnectionManager manager = new WebSocketConnectionManager(
 				new StandardWebSocketClient(),
-				new SimpleWsHandler(), //Must be defined to handle messages
+				simpleWsHandler, //Must be defined to handle messages
 				this.webSocketUri);
 
 		//Will connect as soon as possible

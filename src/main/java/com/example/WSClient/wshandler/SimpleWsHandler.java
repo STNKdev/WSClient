@@ -64,7 +64,7 @@ public class SimpleWsHandler implements WebSocketHandler {
         return false;
     }
 
-    public void saveMessage (Object message) {
+    private void saveMessage (Object message) {
         try {
             JsonNode root = mapper.readTree((String) message);
 
@@ -75,32 +75,10 @@ public class SimpleWsHandler implements WebSocketHandler {
 
             if (table.equals("instrument") && action.equals("partial")) {
 
-                System.out.println("Прошли условие");
-
                 JsonNode data = root.path("data");
 
                 if (data.isArray()) {
                     for (JsonNode curr : data) {
-                        /*instrumentEntity = new InstrumentEntity(
-                                curr.path("symbol").asText(),
-                                Float.parseFloat(curr.path("highPrice").asText()),
-                                Float.parseFloat(curr.path("lowPrice").asText()),
-                                Float.parseFloat(curr.path("lastPrice").asText()),
-                                Float.parseFloat(curr.path("bidPrice").asText()),
-                                Float.parseFloat(curr.path("askPrice").asText())
-                        );
-
-                        instrumentEntity = new InstrumentEntity();
-
-                        instrumentEntity.setSymbolName(curr.path("symbol").asText());
-                        instrumentEntity.setHighPrice(Float.parseFloat(curr.path("highPrice").asText()));
-                        instrumentEntity.setLowPrice(Float.parseFloat(curr.path("lowPrice").asText()));
-                        instrumentEntity.setLastPrice(Float.parseFloat(curr.path("lastPrice").asText()));
-                        instrumentEntity.setBidPrice(Float.parseFloat(curr.path("bidPrice").asText()));
-                        instrumentEntity.setAskPrice(Float.parseFloat(curr.path("askPrice").asText()));
-
-                        System.out.println(instrumentEntity.getId() + " " + instrumentEntity.getSymbolName());*/
-
                         try {
                             instrumentEntityRepository.save(new InstrumentEntity(
                                     curr.path("symbol").asText(),
@@ -110,9 +88,55 @@ public class SimpleWsHandler implements WebSocketHandler {
                                     Float.parseFloat(curr.path("bidPrice").asText()),
                                     Float.parseFloat(curr.path("askPrice").asText())
                             ));
-                            System.out.println("Сохранено!!!! БЛЯЯЯЯЯ");
                         } catch (Exception ex) {
                             ex.printStackTrace();
+                        }
+                    }
+                }
+            }
+
+            if (table.equals("instrument") && action.equals("update")) {
+                JsonNode data = root.path("data");
+
+                if (data.isArray()) {
+                    String symbol = null;
+                    Float highPrice = null;
+                    Float lowPrice = null;
+                    Float lastPrice = null;
+                    Float bidPrice = null;
+                    Float askPrice = null;
+                    InstrumentEntity instrumentEntity = null;
+                    for (JsonNode curr : data) {
+                        if (curr.hasNonNull("symbol")) {
+                            symbol = curr.path("symbol").asText();
+                            System.out.println(symbol);
+                            instrumentEntity = instrumentEntityRepository.findBySymbolName(symbol);
+                            System.out.println(instrumentEntity);
+                            if (instrumentEntity != null) {
+                                System.out.println("Будет обновлен: "
+                                        + instrumentEntity.getSymbolName());
+                                if (curr.hasNonNull("highPrice")) {
+                                    highPrice = Float.parseFloat(curr.path("highPrice").asText());
+                                    instrumentEntity.setHighPrice(highPrice);
+                                }
+                                if (curr.hasNonNull("lowPrice")) {
+                                    lowPrice = Float.parseFloat(curr.path("lowPrice").asText());
+                                    instrumentEntity.setLowPrice(lowPrice);
+                                }
+                                if (curr.hasNonNull("lastPrice")) {
+                                    lastPrice = Float.parseFloat(curr.path("lastPrice").asText());
+                                    instrumentEntity.setLastPrice(lastPrice);
+                                }
+                                if (curr.hasNonNull("bidPrice")) {
+                                    bidPrice = Float.parseFloat(curr.path("bidPrice").asText());
+                                    instrumentEntity.setBidPrice(bidPrice);
+                                }
+                                if (curr.hasNonNull("askPrice")) {
+                                    askPrice = Float.parseFloat(curr.path("askPrice").asText());
+                                    instrumentEntity.setAskPrice(askPrice);
+                                }
+                                instrumentEntityRepository.save(instrumentEntity);
+                            }
                         }
                     }
                 }

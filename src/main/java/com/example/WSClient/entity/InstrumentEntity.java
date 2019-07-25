@@ -7,7 +7,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Objects;
 
 
 @Entity
@@ -15,7 +14,8 @@ import java.util.Objects;
 public class InstrumentEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
+    @JsonIgnore
     private Long id;
 
     /*@Temporal(TemporalType.TIMESTAMP)
@@ -25,7 +25,7 @@ public class InstrumentEntity implements Serializable {
     private Date createdAt;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at", nullable = false)
+    @Column(name = "updated_at")
     @LastModifiedDate
     @JsonIgnore
     private Date updatedAt;*/
