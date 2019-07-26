@@ -19,7 +19,7 @@ public class Controller {
 
     private List<InstrumentEntity> instrumentEntity;
 
-    @GetMapping("/ms")
+    @GetMapping("/coins")
     public ResponseEntity getData () {
         instrumentEntity = instrumentEntityRepository.findAll();
         return new ResponseEntity(instrumentEntity, HttpStatus.OK);

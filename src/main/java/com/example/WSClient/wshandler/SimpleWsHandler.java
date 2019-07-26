@@ -2,7 +2,6 @@ package com.example.WSClient.wshandler;
 
 import com.example.WSClient.entity.InstrumentEntity;
 import com.example.WSClient.repository.InstrumentEntityRepository;
-import com.example.WSClient.service.ServiceApp;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -80,13 +79,21 @@ public class SimpleWsHandler implements WebSocketHandler {
                 if (data.isArray()) {
                     for (JsonNode curr : data) {
                         try {
-                            instrumentEntityRepository.save(new InstrumentEntity(
+                            /*instrumentEntityRepository.save(new InstrumentEntity(
                                     curr.path("symbol").asText(),
                                     Float.parseFloat(curr.path("highPrice").asText()),
                                     Float.parseFloat(curr.path("lowPrice").asText()),
                                     Float.parseFloat(curr.path("lastPrice").asText()),
                                     Float.parseFloat(curr.path("bidPrice").asText()),
                                     Float.parseFloat(curr.path("askPrice").asText())
+                            ));*/
+                            instrumentEntityRepository.save(new InstrumentEntity(
+                                    curr.path("symbol").asText(),
+                                    curr.path("highPrice").asDouble(),
+                                    curr.path("lowPrice").asDouble(),
+                                    curr.path("lastPrice").asDouble(),
+                                    curr.path("bidPrice").asDouble(),
+                                    curr.path("askPrice").asDouble()
                             ));
                         } catch (Exception ex) {
                             ex.printStackTrace();
@@ -100,11 +107,11 @@ public class SimpleWsHandler implements WebSocketHandler {
 
                 if (data.isArray()) {
                     String symbol = null;
-                    Float highPrice = null;
-                    Float lowPrice = null;
-                    Float lastPrice = null;
-                    Float bidPrice = null;
-                    Float askPrice = null;
+                    Double highPrice = null;
+                    Double lowPrice = null;
+                    Double lastPrice = null;
+                    Double bidPrice = null;
+                    Double askPrice = null;
                     InstrumentEntity instrumentEntity = null;
                     for (JsonNode curr : data) {
                         if (curr.hasNonNull("symbol")) {
@@ -116,23 +123,28 @@ public class SimpleWsHandler implements WebSocketHandler {
                                 System.out.println("Будет обновлен: "
                                         + instrumentEntity.getSymbolName());
                                 if (curr.hasNonNull("highPrice")) {
-                                    highPrice = Float.parseFloat(curr.path("highPrice").asText());
+                                    //highPrice = Float.parseFloat(curr.path("highPrice").asText());
+                                    highPrice = curr.path("highPrice").asDouble();
                                     instrumentEntity.setHighPrice(highPrice);
                                 }
                                 if (curr.hasNonNull("lowPrice")) {
-                                    lowPrice = Float.parseFloat(curr.path("lowPrice").asText());
+                                    //lowPrice = Float.parseFloat(curr.path("lowPrice").asText());
+                                    lowPrice = curr.path("lowPrice").asDouble();
                                     instrumentEntity.setLowPrice(lowPrice);
                                 }
                                 if (curr.hasNonNull("lastPrice")) {
-                                    lastPrice = Float.parseFloat(curr.path("lastPrice").asText());
+                                    //lastPrice = Float.parseFloat(curr.path("lastPrice").asText());
+                                    lastPrice = curr.path("lastPrice").asDouble();
                                     instrumentEntity.setLastPrice(lastPrice);
                                 }
                                 if (curr.hasNonNull("bidPrice")) {
-                                    bidPrice = Float.parseFloat(curr.path("bidPrice").asText());
+                                    //bidPrice = Float.parseFloat(curr.path("bidPrice").asText());
+                                    bidPrice = curr.path("bidPrice").asDouble();
                                     instrumentEntity.setBidPrice(bidPrice);
                                 }
                                 if (curr.hasNonNull("askPrice")) {
-                                    askPrice = Float.parseFloat(curr.path("askPrice").asText());
+                                    //askPrice = Float.parseFloat(curr.path("askPrice").asText());
+                                    askPrice = curr.path("askPrice").asDouble();
                                     instrumentEntity.setAskPrice(askPrice);
                                 }
                                 instrumentEntityRepository.save(instrumentEntity);

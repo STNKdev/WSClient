@@ -11,10 +11,9 @@ import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 
 @SpringBootApplication
 @EnableJpaRepositories
-//@EnableJpaAuditing
 public class WsClientApplication {
 
-	private final String webSocketUri = "wss://www.bitmex.com/realtime?subscribe=instrument:XBTUSD";
+	private final String webSocketUri = "wss://www.bitmex.com/realtime?subscribe=instrument:XBTUSD,instrument:ETHUSD,instrument:LTCU19,instrument:XRPU19";
 
 	public static void main(String[] args) {
 		SpringApplication.run(WsClientApplication.class, args);

@@ -34,24 +34,24 @@ public class InstrumentEntity implements Serializable {
     private String symbolName;
 
     @Column(name = "high_price")
-    private Float highPrice;
+    private Double highPrice;
 
     @Column(name = "low_price")
-    private Float lowPrice;
+    private Double lowPrice;
 
     @Column(name = "last_price")
-    private Float lastPrice;
+    private Double lastPrice;
 
     @Column(name = "bid_price")
-    private Float bidPrice;
+    private Double bidPrice;
 
     @Column(name = "ask_price")
-    private Float askPrice;
+    private Double askPrice;
 
     public InstrumentEntity() {
     }
 
-    public InstrumentEntity(String symbolName, Float highPrice, Float lowPrice, Float lastPrice, Float bidPrice, Float askPrice) {
+    public InstrumentEntity(String symbolName, Double highPrice, Double lowPrice, Double lastPrice, Double bidPrice, Double askPrice) {
         this.symbolName = symbolName;
         this.highPrice = highPrice;
         this.lowPrice = lowPrice;
@@ -92,43 +92,43 @@ public class InstrumentEntity implements Serializable {
         this.symbolName = symbolName;
     }
 
-    public Float getHighPrice() {
+    public Double getHighPrice() {
         return highPrice;
     }
 
-    public void setHighPrice(Float highPrice) {
+    public void setHighPrice(Double highPrice) {
         this.highPrice = highPrice;
     }
 
-    public Float getLowPrice() {
+    public Double getLowPrice() {
         return lowPrice;
     }
 
-    public void setLowPrice(Float lowPrice) {
+    public void setLowPrice(Double lowPrice) {
         this.lowPrice = lowPrice;
     }
 
-    public Float getLastPrice() {
+    public Double getLastPrice() {
         return lastPrice;
     }
 
-    public void setLastPrice(Float lastPrice) {
+    public void setLastPrice(Double lastPrice) {
         this.lastPrice = lastPrice;
     }
 
-    public Float getBidPrice() {
+    public Double getBidPrice() {
         return bidPrice;
     }
 
-    public void setBidPrice(Float bidPrice) {
+    public void setBidPrice(Double bidPrice) {
         this.bidPrice = bidPrice;
     }
 
-    public Float getAskPrice() {
+    public Double getAskPrice() {
         return askPrice;
     }
 
-    public void setAskPrice(Float askPrice) {
+    public void setAskPrice(Double askPrice) {
         this.askPrice = askPrice;
     }
 }
