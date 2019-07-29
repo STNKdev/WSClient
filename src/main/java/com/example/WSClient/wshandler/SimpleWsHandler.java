@@ -178,7 +178,7 @@ public class SimpleWsHandler implements WebSocketHandler {
                                 node.path("symbol").asText(),
                                 node.path("bidPrice").asDouble(),
                                 node.path("askPrice").asDouble(),
-                                new Date(timestamp.getEpochSecond())
+                                new Date(timestamp.toEpochMilli())
                         ));
                     }
                 }
@@ -196,7 +196,7 @@ public class SimpleWsHandler implements WebSocketHandler {
                                 node.path("symbol").asText(),
                                 node.path("bidPrice").asDouble(),
                                 node.path("askPrice").asDouble(),
-                                new Date(timestamp.getEpochSecond())
+                                new Date(timestamp.toEpochMilli())
                         ));
                     }
                 }
