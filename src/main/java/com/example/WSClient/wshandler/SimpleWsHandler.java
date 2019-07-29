@@ -1,7 +1,11 @@
 package com.example.WSClient.wshandler;
 
 import com.example.WSClient.entity.InstrumentEntity;
+import com.example.WSClient.entity.QuoteBinFiveMinute;
+import com.example.WSClient.entity.QuoteBinOneMinute;
 import com.example.WSClient.repository.InstrumentEntityRepository;
+import com.example.WSClient.repository.QuoteBinFiveMinuteRepository;
+import com.example.WSClient.repository.QuoteBinOneMinuteRepository;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -14,12 +18,20 @@ import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.io.IOException;
+import java.time.Instant;
+import java.util.Date;
 
 @Service
 public class SimpleWsHandler implements WebSocketHandler {
 
     @Autowired
     private InstrumentEntityRepository instrumentEntityRepository;
+
+    @Autowired
+    private QuoteBinOneMinuteRepository quoteBinOneMinuteRepository;
+
+    @Autowired
+    private QuoteBinFiveMinuteRepository quoteBinFiveMinuteRepository;
 
     private static final ObjectMapper mapper = new ObjectMapper();
 
@@ -150,6 +162,42 @@ public class SimpleWsHandler implements WebSocketHandler {
                                 instrumentEntityRepository.save(instrumentEntity);
                             }
                         }
+                    }
+                }
+            }
+
+            if (table.equals("quoteBin1m") && action.equals("insert")) {
+                JsonNode data = root.path("data");
+
+                if (data.isArray()) {
+                    Instant timestamp = null;
+
+                    for (JsonNode node : data) {
+                        timestamp = Instant.parse(node.path("timestamp").asText());
+                        quoteBinOneMinuteRepository.save(new QuoteBinOneMinute(
+                                node.path("symbol").asText(),
+                                node.path("bidPrice").asDouble(),
+                                node.path("askPrice").asDouble(),
+                                new Date(timestamp.getEpochSecond())
+                        ));
+                    }
+                }
+            }
+
+            if (table.equals("quoteBin5m") && action.equals("insert")) {
+                JsonNode data = root.path("data");
+
+                if (data.isArray()) {
+                    Instant timestamp = null;
+
+                    for (JsonNode node : data) {
+                        timestamp = Instant.parse(node.path("timestamp").asText());
+                        quoteBinFiveMinuteRepository.save(new QuoteBinFiveMinute(
+                                node.path("symbol").asText(),
+                                node.path("bidPrice").asDouble(),
+                                node.path("askPrice").asDouble(),
+                                new Date(timestamp.getEpochSecond())
+                        ));
                     }
                 }
             }
